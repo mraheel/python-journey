@@ -19,7 +19,7 @@ class Category(models.Model):
 
 class Template(models.Model):
     name = models.CharField(max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name="templates", on_delete=models.CASCADE)
     is_paid = models.BooleanField(default=False)
     discount = models.DecimalField(max_digits=10, decimal_places=8)
     price = models.DecimalField(max_digits=10, decimal_places=8)
@@ -30,6 +30,9 @@ class Template(models.Model):
 
     class Meta:
         db_table = "templates"
+
+    def __str__(self):
+        return self.name
 
 class Wishlist(models.Model):
     template = models.OneToOneField(Template, on_delete=models.CASCADE)
@@ -66,7 +69,7 @@ class Event(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.name
     
     class Meta:
         db_table = "events"

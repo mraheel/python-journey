@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from events.models import Event
-from events.serializers import EventSerializer
+from events.models import Event, Category
+from events.serializers import EventSerializer, CategorySerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -45,7 +45,6 @@ class EventList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 
 class EventDetail(APIView):
@@ -80,3 +79,27 @@ class EventDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class CategoryViewSet(APIView):
+    
+    def get(self, request, format=None):
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        response_data = response_formattor(serializer.data, True, 'Data fetched successfully.')
+        return Response(response_data, status=status.HTTP_200_OK)
+     
+    @swagger_auto_schema(
+        request_body=EventSerializer,
+        responses={
+            200: openapi.Response("Successful response"),
+            400: openapi.Response("Error response")
+        }
+    )
+    @transaction.atomic
+    def post(self, request, format=None):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

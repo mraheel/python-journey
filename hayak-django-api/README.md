@@ -5,7 +5,9 @@ This is a basic guide to setting up a Django project with the Django REST Framew
 ## Prerequisites
 
 - Python 3.x installed on your system
-- Basic understanding of command line
+- pip (Python package installer)
+- Virtualenv package (optional, but recommended)
+
 
 ## Getting Started
 
@@ -21,6 +23,10 @@ This is a basic guide to setting up a Django project with the Django REST Framew
 
     ```
     python3 -m venv venv
+    ```
+    or
+    ```
+    py -m venv venv
     ```
 
 4. Activate the virtual environment:
@@ -49,13 +55,21 @@ This is a basic guide to setting up a Django project with the Django REST Framew
     python manage.py migrate
     ```
 
-7. Start the Django development server:
+7. Create a Superuser
+
+    ```sh
+    python manage.py createsuperuser
+    ```
+    Follow the prompts to create a superuser account. This will allow you to access the Django admin interface.
+
+
+8. Start the Django development server:
 
     ```
     python manage.py runserver
     ```
 
-8. Open your web browser and go to `http://127.0.0.1:8000/` to see your Django project running.
+9. Open your web browser and go to `http://127.0.0.1:8000/` to see your Django project running.
 
 ## Additional Resources
 
