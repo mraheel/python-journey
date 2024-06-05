@@ -38,6 +38,8 @@ urlpatterns = [
     
     path('api/account/', include('account.urls')),
 
+    path('', include('acl.urls')),
+
     path('api/', include('events.urls')),
     path('', schema_view.with_ui('swagger', cache_timeout=0),name='schema-swagger-ui'),
 
