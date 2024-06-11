@@ -8,3 +8,42 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
+
+class State(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, unique=True)
+  
+    class Meta:
+        db_table = "states"
+
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, unique=True)
+  
+    class Meta:
+        db_table = "cities"
+
+    def __str__(self):
+        return self.name
+    
+class Language(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
+  
+    class Meta:
+        db_table = "languages"
+
+    def __str__(self):
+        return self.name
+
+class Timezone(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+  
+    class Meta:
+        db_table = "timezones"
+
+    def __str__(self):
+        return self.name
