@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'events',
     'acl',
+    'base',
     
     'rest_framework',
     'rest_framework_simplejwt',
