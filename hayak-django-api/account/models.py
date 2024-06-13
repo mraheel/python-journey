@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-
+from acl.models import Role
 
 class UserManager(BaseUserManager):
 
@@ -45,4 +45,12 @@ class UserData(AbstractUser):
 
     def __str__(self):
         return self.name
+    
+class UserRole(models.Model):
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "user_roles"
+        unique_together = ('user', 'role')
     

@@ -36,7 +36,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api-auth/', include('rest_framework.urls')),
     
-    path('api/account/', include('account.urls')),
+    path('api/users/', include('account.urls')),
 
     path('api/', include('acl.urls')),
 
