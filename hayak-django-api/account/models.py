@@ -53,4 +53,16 @@ class UserRole(models.Model):
     class Meta:
         db_table = "user_roles"
         unique_together = ('user', 'role')
+
+class UserSetting(models.Model):
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='settings')
+    key = models.CharField(max_length=30)
+    value = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "user_settings"
+        unique_together = ('user', 'key')
+
+    def __str__(self):
+        return f'{self.key} - {self.value}'
     

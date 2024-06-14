@@ -1,6 +1,19 @@
 from rest_framework import serializers
-from .models import Country, State, City, Language, Timezone
+from .models import SystemSetting, Country, State, City, Language, Timezone
 
+class SystemSettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SystemSetting
+        fields = ['key', 'value']
+
+class UpdateSystemSettingSerializer(serializers.Serializer):
+    settings = serializers.JSONField()
+
+    def validate_settings(self, value):
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("Settings must be a dictionary.")
+        return value
+    
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country

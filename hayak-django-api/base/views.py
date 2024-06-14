@@ -1,14 +1,47 @@
+from django.db import transaction
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Country, State, City, Language, Timezone
-from .serializers import CountrySerializer, StateSerializer, CitySerializer, LanguageSerializer, TimezoneSerializer
+from .models import SystemSetting, Country, State, City, Language, Timezone
+from .serializers import SystemSettingSerializer, UpdateSystemSettingSerializer, CountrySerializer, StateSerializer, CitySerializer, LanguageSerializer, TimezoneSerializer
+    
+class SystemSettings(APIView):
+    # permission_classes = [IsAdminUser]
 
+    @swagger_auto_schema(
+        operation_description="Get system-wide settings."
+    )
+    @transaction.atomic
+    def get(self, request):
+        settings = SystemSetting.objects.all()
+        serializer = SystemSettingSerializer(settings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=UpdateSystemSettingSerializer,
+        operation_id="update_system_settings",
+        operation_description="Update settings for a specific user."
+    )
+    @transaction.atomic
+    def put(self, request):
+        serializer = UpdateSystemSettingSerializer(data=request.data)
+        if serializer.is_valid():
+            settings = serializer.validated_data['settings']
+            for key, value in settings.items():
+                SystemSetting.objects.update_or_create(
+                    key=key,
+                    defaults={'value': value}
+                )
+            return Response({"message": "Settings updated successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class CountryList(generics.ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer

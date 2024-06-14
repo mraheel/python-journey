@@ -42,7 +42,7 @@ urlpatterns = [
 
     path('api/', include('events.urls')),
 
-    path('api/data/', include('base.urls')),
+    path('api/', include('base.urls')),
 
     path('', schema_view.with_ui('swagger', cache_timeout=0),name='schema-swagger-ui'),
 ]
