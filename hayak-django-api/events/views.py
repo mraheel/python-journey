@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from events.models import Event, Category
-from events.serializers import EventSerializer, CategorySerializer
+from events.serializers import EventSerializer, CategorySerializer, EventStep1Serializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,8 +14,8 @@ from drf_yasg.utils import swagger_auto_schema
 from utils.util import response_formattor
 
 class EventList(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
     
 
     @swagger_auto_schema(
@@ -32,7 +32,7 @@ class EventList(APIView):
     
 
     @swagger_auto_schema(
-        request_body=EventSerializer,
+        request_body=EventStep1Serializer,
         responses={
             200: openapi.Response("Successful response"),
             400: openapi.Response("Error response")
@@ -40,7 +40,7 @@ class EventList(APIView):
     )
     @transaction.atomic
     def post(self, request, format=None):
-        serializer = EventSerializer(data=request.data)
+        serializer = EventStep1Serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings
 User = settings.AUTH_USER_MODEL
-
+from account.models import UserData
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -48,23 +48,24 @@ STATUS_CHOICES = (
 
 class Event(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE, default=True)
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     market_status = models.CharField(max_length=255)
     description = models.TextField()
     template = models.ForeignKey(Template, on_delete=models.CASCADE)
-    is_custom_template = models.BooleanField()
-    guests = models.IntegerField()
-    tbd = models.BooleanField()
-    start_date = models.DateField()
-    end_date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    timezone = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    latitude = models.DecimalField(max_digits=10, decimal_places=8)
-    longitude = models.DecimalField(max_digits=11, decimal_places=8)
-    status = models.CharField(max_length=255, choices= STATUS_CHOICES)
+    is_custom_template = models.BooleanField(default=True)
+    guests = models.IntegerField(default=True)
+    tbd = models.BooleanField(default=True)
+    start_date = models.DateField(default=True)
+    end_date = models.DateField(default=True)
+    start_time = models.TimeField(default=True)
+    end_time = models.TimeField(default=True)
+    timezone = models.CharField(max_length=30, default=True)
+    address = models.CharField(max_length=255, default=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=8, default=True)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8, default=True)
+    status = models.CharField(max_length=255, choices= STATUS_CHOICES, default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
